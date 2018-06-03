@@ -1,0 +1,31 @@
+思路：
+   
+   首先写bank.h文件，定义结构体Account，包含了账户的信息,
+账户的信息有：id,username,password,money
+   
+   定义一个结构体Msg，包含消息类型和账户信息,#define定义
+所有可能出现的消息类型，两个Key值用作创建消息队列，为了
+避免重复定义，把key值定义在bank.c文件中
+
+   写server.c，代表服务器端，需要三个函数:init函数用来
+创建消息队列（msgget），destroy函数来删除消息队列（msgctl）,
+start函数用来创建子进程（vfork）并使用execl调用其他文件。
+   
+    写客户端，需要定义一个函数，绘制字符界面，第二个函数
+createUser来创建账户，获取消息队列（msgget），发送消息
+到消息队列一(msgsnd)
+
+   写open.c文件，获取消息队列,接收消息队列一中的消息，
+判断消息类型，并调用相关的函数实现
+
+   写dao.h来声明文件操作中的函数，dao.c实现文件操作的函数，
+主要包括：generator_id()生成帐号，createUser函数保存账户
+信息，结果返回给open.c文件中
+
+   在open.c文件中给客户端发送消息到消息队列二，代表处理
+结果，客户端接收消息队列二中的消息，并根据结果提示用户。
+
+注意：
+Makefile文件的执行方法：
+   make  ->  表示按照Makefile文件的规则进行执行   
+   make clean -> 表示执行clean下面的指令
